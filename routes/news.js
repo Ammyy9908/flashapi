@@ -32,6 +32,11 @@ router.get('/everything',verify,async (req, res) => {
 
 })
 .get("/sources",verify,async (req,res) => {
+
+   if(req.query.category){
+      const sources = await Source.find({ category: req.query.category});
+      return res.status(200).send({status:"ok",sources:sources})
+   }
    const sources = await Source.find();
    res.status(200).send({status:"ok",sources:sources})
 })
