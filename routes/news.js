@@ -50,7 +50,7 @@ router.get('/everything',verify,async (req, res) => {
       }
 
 
-      const category = await Category.findOne({name:category},{name:1,_id:0});
+      const cat = await Category.findOne({name:category},{name:1,_id:0});
       const language = await Language.findOne({name:language},{name:1,_id:0});
       const country = await Country.findOne({name:country},{name:1,_id:0});
 
@@ -60,7 +60,7 @@ router.get('/everything',verify,async (req, res) => {
          slug,
          description,
          url,
-         category:category.name,
+         category:cat.name,
          language:language.name,
          country:country.name
       });
