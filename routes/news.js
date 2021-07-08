@@ -37,22 +37,22 @@ router.get('/everything',verify,async (req, res) => {
 })
 .post("/source/add",verify,async (req, res) => {
   
-   const {slug,name,description,url,category_id,language_id,country_id} = req.body;
+   const {slug,name,description,url,category,language,country} = req.body;
 
-      if(!category_id){
-         return res.status(400).send({status:"Missing Field",code:"MissingField","message":"Category id Required"})
+      if(!category){
+         return res.status(400).send({status:"Missing Field",code:"MissingField","message":"Category Required"})
       }
-      if(!language_id){
-         return res.status(400).send({status:"Missing Field",code:"MissingField","message":"Language id Required"})
+      if(!language){
+         return res.status(400).send({status:"Missing Field",code:"MissingField","message":"Language Required"})
       }
-      if(!country_id){
-         return res.status(400).send({status:"Missing Field",code:"MissingField","message":"Country id Required"})
+      if(!country){
+         return res.status(400).send({status:"Missing Field",code:"MissingField","message":"Country Required"})
       }
 
 
-      const category = await Category.findOne({_id:category_id},{name:1,_id:0});
-      const language = await Language.findOne({_id:language_id},{name:1,_id:0});
-      const country = await Country.findOne({_id:country_id},{name:1,_id:0});
+      const category = await Category.findOne({name:category},{name:1,_id:0});
+      const language = await Language.findOne({name:language},{name:1,_id:0});
+      const country = await Country.findOne({name:country},{name:1,_id:0});
 
 
       const newSource = new Source({
