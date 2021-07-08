@@ -19,7 +19,7 @@ app.use("/api",apiRouter)
 app.listen(port,()=>{
    //make a db connection
 
-   mongoose.connect('mongodb://127.0.0.1:27017/flashapi',{ useNewUrlParser: true ,useUnifiedTopology: true}).then(()=>{
+   mongoose.connect('mongodb+srv://admin-summit:2146255sb8@cluster0.fyuq8.mongodb.net/flashapi',{ useNewUrlParser: true ,useUnifiedTopology: true}).then(()=>{
       console.log(`Appliation started & connected to Database running on ${port}`);
    })
 })
