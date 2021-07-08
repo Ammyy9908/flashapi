@@ -51,8 +51,8 @@ router.get('/everything',verify,async (req, res) => {
 
 
       const cat = await Category.findOne({name:category},{name:1,_id:0});
-      const language = await Language.findOne({name:language},{name:1,_id:0});
-      const country = await Country.findOne({name:country},{name:1,_id:0});
+      const lang = await Language.findOne({name:language},{name:1,_id:0});
+      const cty = await Country.findOne({name:country},{name:1,_id:0});
 
 
       const newSource = new Source({
@@ -61,8 +61,8 @@ router.get('/everything',verify,async (req, res) => {
          description,
          url,
          category:cat.name,
-         language:language.name,
-         country:country.name
+         language:lang.name,
+         country:cty.name
       });
 
       newSource.save().then(() => {
