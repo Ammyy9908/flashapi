@@ -6,6 +6,9 @@ dotenv.config()
 
 module.exports=function(req,res,next){
     let token = req.header('authorization');
+    if(!token){
+       return res.status(401).send({status:"Missing Token",code:"MissingField","message":"Token Required in Authorization Headers"})
+    }
     if (token.startsWith('Bearer ')) {
      // Remove Bearer from string
      token = token.slice(7, token.length).trimLeft();

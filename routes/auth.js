@@ -13,7 +13,7 @@ router.get('/user',verify,async (req, res) => {
 
    // find the user from the db 
 
-   const user = await User.findOne({_id: _id},{email:1})
+   const user = await User.findOne({_id: _id},{email:1,apiKey:1})
 
    res.status(200).send({message:"User authorized",user})
   

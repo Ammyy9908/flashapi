@@ -157,6 +157,59 @@ router.get('/everything',verify,async (req, res) => {
       return res.status(200).send({message:"Category Added"})
    })
 })
+.post("/article/add",verify,async (req, res)=>{
+   const {title,description,content,author,url,image,publishedAt,source_id} = req.body;
+   if(!title && !description && !content && !author && !url && !publishedAt && !image){
+      return res.status(400).send({
+         error:"Field Required",
+         code:"MissingField",
+         message:"All request fields required!"
+      })
+   }
+
+
+   //fetch the source
+   const source  = await Source.findOne({_id:source_id},{name:1,slug:1});
+   const newArticle  = new Article({
+      title,
+      description,
+      content,
+      author,
+      url,
+      image,
+      publishedAt,
+      source:{
+         id:source.slug,
+         name:source.name
+      }
+   })
+
+   newArticle.save().then(() =>{
+      return res.status(200).send({message:"Article uploaded!"})
+   }).catch((err) =>{
+      return res.status(500).send({message:err.message})
+   })
+
+
+
+})
+.get("/articles/all",verify,async (req, res)=>{
+   if(req.query.q){
+      console.log(req.query.q)
+      const re = new RegExp(req.query.q,'i');
+      console.log(re)
+      const articles = await Article.find({title : re})
+      return res.status(200).send({status:"ok",totalResults:articles.length,articles: articles})
+   }
+   const articles = await Article.find();
+   return res.status(200).send({status:"ok",totalResults:articles.length,articles: articles})
+})
+.get("/article/:id",verify,async (req, res)=>{
+   const {id} = req.params;
+
+   const article = await Article.findOne({_id:id});
+   return res.status(200).send({status:"ok",article})
+})
 
 
 module.exports = router;
