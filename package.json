@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A News API",
   "main": "index.js",
+  "homepage": "https://flashapi-client.vercel.app",
   "scripts": {
     "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
