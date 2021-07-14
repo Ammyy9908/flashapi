@@ -13,7 +13,7 @@ router.get('/user',verify,async (req, res) => {
 
    // find the user from the db 
 
-   const user = await User.findOne({_id: _id},{email:1,apiKey:1})
+   const user = await User.findOne({_id: _id},{email:1,apiKey:1,subscription:1})
 
    res.status(200).send({message:"User authorized",user})
   
@@ -23,10 +23,15 @@ router.get('/user',verify,async (req, res) => {
    check("password","Please provide a password that has length of 6 character long!").isLength({
       min:6
    })
-],async (req, res)=>{
-   const {email,password} = req.body;
-   const errors = validationResult(req);
 
+],async (req, res)=>{
+   const {email,password,robot,role} = req.body;
+   console.log(req.body)
+   const errors = validationResult(req);
+   if(!robot){
+      
+      return res.status(400).json({errors:"Please verify you are not robot"})
+   }
    if(!errors.isEmpty()){
       return res.status(400).json({errors})
    }
@@ -47,7 +52,8 @@ router.get('/user',verify,async (req, res) => {
    new User({
       email,
       password:hashedPassword,
-      apiKey:key
+      apiKey:key,
+      subscription:{type:role}
    }).save().then(() =>{
       return res.status(200).json({message:"Success"});
    })
@@ -64,6 +70,8 @@ router.get('/user',verify,async (req, res) => {
       min:6
    })
 ],async (req, res)=>{
+   console.log("Login")
+   console.log(req.body)
    const {email,password} = req.body;
    const errors = validationResult(req);
 
@@ -99,8 +107,26 @@ router.get('/user',verify,async (req, res) => {
 .post("/login/google",async (req, res)=>{
    const {uid,password} = req.body;
 })
-.put("/update/user",async (req, res)=>{
+.put("/update/email/:id",async (req, res)=>{
    const {email} = req.body;
+   const {id} = req.params;
+   const user = await User.findOne({_id:id});
+   const isUser = await User.findOne({email:email});
+   if(!isUser){
+      
+      const isUpdated = await User.updateOne({_id:id},{email:email});
+
+   if(isUpdated){
+      return res.status(200).send({message:"email updated successfully"})
+   }
+   }
+   if(isUser){
+      return res.status(400).send({message:"User already exists with this email address"})
+   }
+   
+  
+
+   
 })
 
 module.exports = router;
